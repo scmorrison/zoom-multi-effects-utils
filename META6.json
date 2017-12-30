@@ -1,0 +1,14 @@
+{
+    "perl" : "6.c",
+    "name" : "Zoom Multi-Effects Utils",
+    "license" : "Artistic-2.0",
+    "version"  : "0.0.1",
+    "description" : "Scripts and utilities to manage Zoom Multi-Effects Pedals on Linux",
+    "tags" : [ "music", "zoom" ],
+    "provides" : {},
+    "authors" : [ "Sam Morrison" ],
+    "depends" : [
+        "Cro"
+    ],
+    "source-url" : "https://github.com/scmorrison/zoom-multi-effects-utils.git"
+}
