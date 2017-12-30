@@ -32,7 +32,7 @@ use v6;
 use Cro::HTTP::Client;
 
 sub download(
-    IO::Path :$o = $*HOME.IO.child('Zoom-Patches'),
+    IO::Path :$out = $*HOME.IO.child('Zoom-Patches'),
     Str      :$model,
     Str      :$url
 ) {
@@ -45,37 +45,35 @@ sub download(
     }
 
     # Create output directory
-    mkdir $o.child($model);
-    die "Output directory not found" unless $o.child($model).IO ~~ :e;
+    mkdir $out.child($model);
+    die "Output directory not found" unless $out.child($model).IO ~~ :e;
 
     my $client = Cro::HTTP::Client.new;
     my $resp   = await $client.get: ($url ?? $url !! %urls{$model});
-
-    my Str $html = await $resp.body-text();
-
+    my $html   = await $resp.body-text();
     my @download_urls = ~<< ($html ~~ m:g/ 'href="' <(\S* 'ZoomGuitarLab_Patch_Data' \S*)> '"'/);
 
     map -> $url {
         my $file_name = S/<["]>// given split('/', $url).tail;
-        my $target    = $o.child($model).child($file_name); 
+        my $target    = $out.child($model).child($file_name); 
         next when $target.IO ~~ :e;
         say "Downloading $file_name";
         my $resp      = await $client.get: $url;
-        spurt $o.child($model).child($file_name), await $resp.body-blob();
+        spurt $out.child($model).child($file_name), await $resp.body-blob();
     }, @download_urls;
 }
 
 multi sub MAIN(
-    IO::Path :$o = $*HOME.IO.child('Zoom-Patches'),
+    IO::Path :$out = $*HOME.IO.child('Zoom-Patches'),
     Str      :$model = 'g3xn'
 ) {
-    download :$o, :$model;
+    download :$out, :$model;
 }
 
 multi sub MAIN(
-    IO::Path :$o = $*HOME.IO.child('Zoom-Patches'),
+    IO::Path :$out = $*HOME.IO.child('Zoom-Patches'),
     Str      :$model!, # must supply a model name when using url
     Str      :$url!
 ) {
-    download :$o, :$model, :$url;
+    download :$out, :$model, :$url;
 }
