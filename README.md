@@ -1,6 +1,6 @@
 # Zoom Multi-Effects Utils
 
-Scripts and utilities to simplify working with Zoom Multi-Effects pedels on Linux.
+Scripts and utilities to simplify working with Zoom Multi-Effects pedals on Linux.
 
 ## Files
 
